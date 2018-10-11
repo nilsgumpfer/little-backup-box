@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./gpio
+. /home/pi/little-backup-box/scripts/gpio
 
 function blink()
 {

@@ -25,8 +25,9 @@ CARD_DEV="sd[ab]1" # Name of the storage card
 CARD_MOUNT_POINT="/media/card" # Mount point of the storage card
 SHUTD="5" # Minutes to wait before shutdown due to inactivity
 
-source gpio
-source blink
+. /home/pi/little-backup-box/scripts/gpio
+. /home/pi/little-backup-box/scripts/blink
+
 
 gpio mode 5 out
 gpio mode 6 out
@@ -100,6 +101,7 @@ if [ ! -z "${CARD_READER[0]}" ]; then
   rsync -avh --info=progress2 --exclude "*.id" "$CARD_MOUNT_POINT"/ "$BACKUP_PATH" &
   pid=$!
 
+  COUNTER=0
   while kill -0 $pid 2> /dev/null
     do
     STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
@@ -107,24 +109,69 @@ if [ ! -z "${CARD_READER[0]}" ]; then
     sudo sh -c "echo $PERCENT"
     #IF STATEMENTS HERE FOR LEDS
     if [ $PERCENT -lt 19 ]; then
-      gpio write 26 1
+      if [ "$COUNTER" -eq 0 ]; then
+        blink 26 0.25 &
+        blink_pid1=$!
+        COUNTER=$((COUNTER+1))
+      fi
+
     elif [ $PERCENT -gt 20 ] && [ $PERCENT -lt 39 ]; then
-      gpio write 19 1
+      kill $blink_pid1 2> /dev/null
+      gpio write 26 1
+      if [ "$COUNTER" -eq 1 ]; then
+        blink 19 0.25 &
+        blink_pid2=$!
+        COUNTER=$((COUNTER+1))
+      fi
+
     elif [ $PERCENT -gt 40 ] && [ $PERCENT -lt 59 ]; then
-      gpio write 13 1
+      kill $blink_pid2 2> /dev/null
+      gpio write 26 1
+      gpio write 19 1
+      if [ "$COUNTER" -eq 2 ]; then
+        blink 13 0.25 &
+        blink_pid3=$!
+        COUNTER=$((COUNTER+1))
+      fi
     elif [ $PERCENT -gt 60 ] && [ $PERCENT -lt 79 ]; then
-      gpio write 6 1
+      kill $blink_pid3 2> /dev/null
+      gpio write 26 1
+      gpio write 19 1
+      gpio write 13 1
+      if [ "$COUNTER" -eq 3 ]; then
+        blink 6 0.25 &
+        blink_pid4=$!
+        COUNTER=$((COUNTER+1))
+      fi
     elif [ $PERCENT -gt 80 ] && [ $PERCENT -lt 100 ]; then
-      gpio write 5 1
+      kill $blink_pid4 2> /dev/null
+      gpio write 26 1
+      gpio write 19 1
+      gpio write 13 1
+      gpio write 6 1
+      if [ "$COUNTER" -eq 3 ]; then
+        blink 5 0.25 &
+        blink_pid5=$!
+        COUNTER=$((COUNTER+1))
+      fi
     fi
-    # then
-    #LEDS
-    #fi
+
     sleep 1
   done
-  sudo sh -c "echo 1 > /sys/class/leds/led0/brightness"
-  # Turn off the POWER LED to indicate that the backup is completed
-  sudo sh -c "echo 0 > /sys/class/leds/led1/brightness"
+  kill $blink_pid5 2> /dev/null
+  gpio write 26 1
+  gpio write 19 1
+  gpio write 13 1
+  gpio write 6 1
+  gpio write 5 1
+
+  sleep 5
+
+  gpio clean 5
+  gpio clean 6
+  gpio clean 13
+  gpio clean 19
+  gpio clean 26
 fi
 
 # Shutdown
