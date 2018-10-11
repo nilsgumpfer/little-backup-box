@@ -1,0 +1,25 @@
+#!/bin/bash
+
+source ./gpio
+
+function blink()
+{
+  local pin=$1
+  local speed=$2
+
+  while :
+  do
+    gpio write $pin 1
+    sleep $speed
+    gpio write $pin 0
+    sleep $speed
+  done
+
+}
+
+
+# Just invoke our function if the script is called directly
+if [ "$BASH_SOURCE" == "$0" ]; then
+  gpio mode $1 out
+  blink $@
+fi

@@ -25,6 +25,22 @@ CARD_DEV="sd[ab]1" # Name of the storage card
 CARD_MOUNT_POINT="/media/card" # Mount point of the storage card
 SHUTD="5" # Minutes to wait before shutdown due to inactivity
 
+source ./gpio
+source ./blink
+
+gpio mode 5 out
+gpio mode 6 out
+gpio mode 13 out
+gpio mode 19 out
+gpio mode 26 out
+
+gpio wirte 5 0
+gpio write 6 0
+gpio write 13 0
+gpio write 19 0
+gpio write 26 0
+
+
 # Set the ACT LED to heartbeat
 sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
 
@@ -90,12 +106,16 @@ if [ ! -z "${CARD_READER[0]}" ]; then
     PERCENT=$(expr 100 \* $STORAGE_COUNT / $CARD_COUNT)
     sudo sh -c "echo $PERCENT"
     #IF STATEMENTS HERE FOR LEDS
-    if [ $PERCENT -gt 25 ] && [ $PERCENT -lt 49 ]; then
-      sudo sh -c "echo 300 > /sys/class/leds/led0/delay_on"
-    elif [ $PERCENT -gt 50 ] && [ $PERCENT -lt 74 ]; then
-      sudo sh -c "echo 200 > /sys/class/leds/led0/delay_on"
-    elif [ $PERCENT -gt 75 ] && [ $PERCENT -lt 100 ]; then
-      sudo sh -c "echo 100 > /sys/class/leds/led0/delay_on"
+    if [ $PERCENT -lt 19 ]; then
+      gpio write 26 1
+    elif [ $PERCENT -gt 20 ] && [ $PERCENT -lt 39 ]; then
+      gpio write 19 1
+    elif [ $PERCENT -gt 40 ] && [ $PERCENT -lt 59 ]; then
+      gpio write 13 1
+    elif [ $PERCENT -gt 60 ] && [ $PERCENT -lt 79 ]; then
+      gpio write 6 1
+    elif [ $PERCENT -gt 80 ] && [ $PERCENT -lt 100 ]; then
+      gpio write 5 1
     fi
     # then
     #LEDS
