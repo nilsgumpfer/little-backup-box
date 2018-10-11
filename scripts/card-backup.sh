@@ -25,8 +25,8 @@ CARD_DEV="sd[ab]1" # Name of the storage card
 CARD_MOUNT_POINT="/media/card" # Mount point of the storage card
 SHUTD="5" # Minutes to wait before shutdown due to inactivity
 
-source ./gpio
-source ./blink
+source gpio
+source blink
 
 gpio mode 5 out
 gpio mode 6 out

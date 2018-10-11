@@ -29,6 +29,9 @@ cd
 git clone https://github.com/skidave/little-backup-box.git
 cd little-backup-box/fonts
 sudo cp -R . /home/pi/.fonts
+cd ../scripts
+sudo chmod u+x gpio
+sudo chmod u+x blink
 cd
 
 HEIGHT=15
