@@ -52,7 +52,7 @@ sudo shutdown -h $SHUTD "Shutdown is activated. To cancel: sudo shutdown -c"
 STORAGE=$(ls /dev/* | grep "$STORAGE_DEV" | cut -d"/" -f3)
 #STORAGE=$(lsblk -x SIZE | grep sd[a-z]1  | awk '{print $1}' | sort | head -n 1)
 while [ -z "${STORAGE}" ]
-  do
+do
   sleep 1
   STORAGE=$(ls /dev/* | grep "$STORAGE_DEV" | cut -d"/" -f3)
 done
@@ -71,7 +71,7 @@ sudo sh -c "echo 1000 > /sys/class/leds/led0/delay_on"
 # takes first device found
 CARD_READER=($(ls /dev/* | grep "$CARD_DEV" | cut -d"/" -f3))
 until [ ! -z "${CARD_READER[0]}" ]
-  do
+do
   sleep 1
   CARD_READER=($(ls /dev/* | grep "$CARD_DEV" | cut -d"/" -f3))
 done
@@ -103,7 +103,7 @@ if [ ! -z "${CARD_READER[0]}" ]; then
 
   COUNTER=0
   while kill -0 $pid 2> /dev/null
-    do
+  do
     STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
     PERCENT=$(expr 100 \* $STORAGE_COUNT / $CARD_COUNT)
     sudo sh -c "echo $PERCENT"
@@ -149,7 +149,7 @@ if [ ! -z "${CARD_READER[0]}" ]; then
       gpio write 19 1
       gpio write 13 1
       gpio write 6 1
-      if [ "$COUNTER" -eq 3 ]; then
+      if [ "$COUNTER" -eq 4 ]; then
         blink 5 0.25 &
         blink_pid5=$!
         COUNTER=$((COUNTER+1))
@@ -158,7 +158,10 @@ if [ ! -z "${CARD_READER[0]}" ]; then
 
     sleep 1
   done
-  kill $blink_pid5 2> /dev/null
+  if [ "$COUNTER" -eq 5 ]; then
+    kill $blink_pid5 2> /dev/null
+  fi
+
   gpio write 26 1
   gpio write 19 1
   gpio write 13 1
