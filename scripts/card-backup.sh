@@ -26,7 +26,7 @@ CARD_MOUNT_POINT="/media/card" # Mount point of the storage card
 SHUTD="5" # Minutes to wait before shutdown due to inactivity
 
 # Set the ACT LED to heartbeat
-sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
+# sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
 
 # Shutdown after a specified period of time (in minutes) if no device is connected.
 # sudo shutdown -h $SHUTD "Shutdown is activated. To cancel: sudo shutdown -c"
@@ -108,9 +108,9 @@ if [ ! -z "${CARD_READER[0]}" ]; then
     #fi
     sleep 1
   done
-  sudo sh -c "echo 1 > /sys/class/leds/led0/brightness"
+  # sudo sh -c "echo 1 > /sys/class/leds/led0/brightness"
   # Turn off the POWER LED to indicate that the backup is completed
-  sudo sh -c "echo 0 > /sys/class/leds/led1/brightness"
+  # sudo sh -c "echo 0 > /sys/class/leds/led1/brightness"
 fi
 
 echo "Finished. Shutting down."
