@@ -26,7 +26,7 @@ CARD_MOUNT_POINT="/media/card" # Mount point of the storage card
 SHUTD="5" # Minutes to wait before shutdown due to inactivity
 
 # Set the ACT LED to heartbeat
-# sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
+sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
 
 # Shutdown after a specified period of time (in minutes) if no device is connected.
 # sudo shutdown -h $SHUTD "Shutdown is activated. To cancel: sudo shutdown -c"
