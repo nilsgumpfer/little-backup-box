@@ -99,8 +99,7 @@ if [ ! -z "${CARD_READER[0]}" ]; then
     STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
     PERCENT=$(expr 100 \* $STORAGE_COUNT / $CARD_COUNT)
     sudo sh -c "echo $PERCENT"
-    sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress: " 
-    #+ $PERCENT -t $STORAGE_COUNT + " / " + $CARD_COUNT
+    sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress:  $PERCENT" -t " " -t "$STORAGE_COUNT / $CARD_COUNT"
     
     sleep 1
   done
