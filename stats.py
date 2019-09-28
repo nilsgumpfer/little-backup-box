@@ -52,8 +52,10 @@ def main():
     # Draw some shapes.
     # First define some constants to allow easy resizing of shapes.
     padding = -2
+    space = 8
     top = padding
     bottom = height - padding
+    pos = 0
     # Move left to right keeping track of the current x position for drawing shapes.
     x = 0
 
@@ -65,13 +67,15 @@ def main():
     # font = ImageFont.truetype('Minecraftia.ttf', 8)
 
     text = parseargs()
+    lines = text.splitlines()
 
     # Draw a black filled box to clear the image.
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
-
-    # Write two lines of text.
-
-    draw.text((x, top), text, font=font, fill=255)
+    
+    for line in lines:
+        # Write two lines of text.
+        draw.text((x, top + pos), line, font=font, fill=255)
+        pos += space
 
     # Display image.
     disp.image(image)
