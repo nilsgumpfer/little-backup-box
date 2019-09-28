@@ -92,7 +92,6 @@ if [ ! -z "${CARD_READER[0]}" ]; then
   rsync -avh --info=progress2 --exclude "*.id" "$CARD_MOUNT_POINT"/ "$BACKUP_PATH" &
   pid=$!
 
-  sudo python3 display.py -t "Copying"
   echo "Starting to copy files.."
 
   while kill -0 $pid 2> /dev/null
@@ -100,7 +99,7 @@ if [ ! -z "${CARD_READER[0]}" ]; then
     STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
     PERCENT=$(expr 100 \* $STORAGE_COUNT / $CARD_COUNT)
     sudo sh -c "echo $PERCENT"
-    sudo python3 display.py -t "Progress..."
+    sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress: " + $PERCENT -t $STORAGE_COUNT + " / " + $CARD_COUNT
     
     sleep 1
   done
