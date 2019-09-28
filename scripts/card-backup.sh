@@ -28,7 +28,7 @@ SHUTD="5" # Minutes to wait before shutdown due to inactivity
 
 # Set the ACT LED to heartbeat
 sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
-sudo python3 display.py -t "Waiting"
+sudo python3 display.py -t "Waiting for USB device"
 
 # Shutdown after a specified period of time (in minutes) if no device is connected.
 # sudo shutdown -h $SHUTD "Shutdown is activated. To cancel: sudo shutdown -c"
@@ -45,7 +45,7 @@ done
 # When the USB storage device is detected, mount it
 mount /dev/"$STORAGE_DEV" "$STORAGE_MOUNT_POINT"
 
-sudo python3 display.py -t "USB storage"
+sudo python3 display.py -t "Waiting for SD card"
 echo "USB storage device mounted. Waiting for SD card.."
 
 # Cancel shutdown
@@ -99,13 +99,13 @@ if [ ! -z "${CARD_READER[0]}" ]; then
     STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
     PERCENT=$(expr 100 \* $STORAGE_COUNT / $CARD_COUNT)
     sudo sh -c "echo $PERCENT"
-    sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress:  $PERCENT" -t " " -t "$STORAGE_COUNT / $CARD_COUNT"
+    sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress:    $PERCENT %" -t " " -t "Items left:   $STORAGE_COUNT / $CARD_COUNT"
     
     sleep 1
   done
 fi
 
-sudo python3 display.py -t "Finished"
+sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Finished" -t "Shutting down"
 echo "Finished. Shutting down."
 
 # Shutdown
