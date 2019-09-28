@@ -96,24 +96,13 @@ if [ ! -z "${CARD_READER[0]}" ]; then
     STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
     PERCENT=$(expr 100 \* $STORAGE_COUNT / $CARD_COUNT)
     sudo sh -c "echo $PERCENT"
-    #IF STATEMENTS HERE FOR LEDS
-    if [ $PERCENT -gt 25 ] && [ $PERCENT -lt 49 ]; then
-      sudo sh -c "echo 300 > /sys/class/leds/led0/delay_on"
-    elif [ $PERCENT -gt 50 ] && [ $PERCENT -lt 74 ]; then
-      sudo sh -c "echo 200 > /sys/class/leds/led0/delay_on"
-    elif [ $PERCENT -gt 75 ] && [ $PERCENT -lt 100 ]; then
-      sudo sh -c "echo 100 > /sys/class/leds/led0/delay_on"
-    fi
-    # then
-    #LEDS
-    #fi
+    sudo python3 display.py -t "Progress:" -t $PERCENT
+    
     sleep 1
   done
-  # sudo sh -c "echo 1 > /sys/class/leds/led0/brightness"
-  # Turn off the POWER LED to indicate that the backup is completed
-  # sudo sh -c "echo 0 > /sys/class/leds/led1/brightness"
 fi
 
+sudo python3 display.py -t "Finished." -t " Shutting down."
 echo "Finished. Shutting down."
 
 # Shutdown
