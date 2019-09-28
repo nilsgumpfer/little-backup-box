@@ -28,6 +28,7 @@ SHUTD="5" # Minutes to wait before shutdown due to inactivity
 
 # Set the ACT LED to heartbeat
 sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
+sudo python3 display.py -t "Waiting"
 
 # Shutdown after a specified period of time (in minutes) if no device is connected.
 # sudo shutdown -h $SHUTD "Shutdown is activated. To cancel: sudo shutdown -c"
@@ -44,6 +45,7 @@ done
 # When the USB storage device is detected, mount it
 mount /dev/"$STORAGE_DEV" "$STORAGE_MOUNT_POINT"
 
+sudo python3 display.py -t "USB storage"
 echo "USB storage device mounted. Waiting for SD card.."
 
 # Cancel shutdown
@@ -66,6 +68,7 @@ done
 if [ ! -z "${CARD_READER[0]}" ]; then
   mount /dev"/${CARD_READER[0]}" "$CARD_MOUNT_POINT"
 
+  sudo python3 display.py -t "SD card"
   echo "SD card mounted. Setting things up.."
 
   CARD_COUNT=$(find $CARD_MOUNT_POINT/ -type f | wc -l)
@@ -89,6 +92,7 @@ if [ ! -z "${CARD_READER[0]}" ]; then
   rsync -avh --info=progress2 --exclude "*.id" "$CARD_MOUNT_POINT"/ "$BACKUP_PATH" &
   pid=$!
 
+  sudo python3 display.py -t "Copying"
   echo "Starting to copy files.."
 
   while kill -0 $pid 2> /dev/null
@@ -96,13 +100,13 @@ if [ ! -z "${CARD_READER[0]}" ]; then
     STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
     PERCENT=$(expr 100 \* $STORAGE_COUNT / $CARD_COUNT)
     sudo sh -c "echo $PERCENT"
-    sudo python3 display.py -t "Progress:" -t $PERCENT
+    sudo python3 display.py -t "Progress..."
     
     sleep 1
   done
 fi
 
-sudo python3 display.py -t "Finished." -t " Shutting down."
+sudo python3 display.py -t "Finished"
 echo "Finished. Shutting down."
 
 # Shutdown
