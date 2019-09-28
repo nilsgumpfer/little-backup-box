@@ -24,6 +24,7 @@ STORAGE_MOUNT_POINT="/media/storage" # Mount point of the storage device
 CARD_DEV="sda1" # Name of the storage card
 CARD_MOUNT_POINT="/media/card" # Mount point of the storage card
 SHUTD="5" # Minutes to wait before shutdown due to inactivity
+# TODO: Optimize this / make this variable, not static
 
 # Set the ACT LED to heartbeat
 sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
