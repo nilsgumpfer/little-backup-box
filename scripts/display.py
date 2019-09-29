@@ -1,4 +1,3 @@
-import time
 import argparse
 
 import Adafruit_GPIO.SPI as SPI
@@ -51,7 +50,7 @@ def main():
 
     # Draw some shapes.
     # First define some constants to allow easy resizing of shapes.
-    padding = 6
+    padding = 9
     space = 8
     top = padding
     bottom = height - padding
