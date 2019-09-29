@@ -27,7 +27,7 @@ SHUTD="5" # Minutes to wait before shutdown due to inactivity
 
 
 # Print on display
-sudo python3 /home/pi/little-backup-box/scripts/display.py -t "    Insert USB device"
+sudo python3 /home/pi/little-backup-box/scripts/display.py -t "   Insert USB device"
 
 # Wait for a USB storage device (e.g., a USB flash drive)
 STORAGE=$(ls /dev/sd* | grep "$STORAGE_DEV" | cut -d"/" -f3)
@@ -41,7 +41,7 @@ done
 mount /dev/"$STORAGE_DEV" "$STORAGE_MOUNT_POINT"
 
 # Print on display
-sudo python3 /home/pi/little-backup-box/scripts/display.py -t "     Insert SD card"
+sudo python3 /home/pi/little-backup-box/scripts/display.py -t "    Insert SD card"
 
 # Wait for SD card
 CARD_READER=($(ls /dev/sd* | grep "$CARD_DEV" | cut -d"/" -f3))
@@ -82,7 +82,7 @@ if [ ! -z "${CARD_READER[0]}" ]; then
     STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
     PERCENT=$(expr 100 \* $STORAGE_COUNT / $CARD_COUNT)
 
-    sudo python3 /home/pi/little-backup-box/scripts/display.py -t "             $PERCENT %" -t "Files:  $STORAGE_COUNT / $CARD_COUNT"
+    sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress:  $PERCENT %" -t "Files:  $STORAGE_COUNT / $CARD_COUNT"
     
     sleep 1
   done
