@@ -27,6 +27,18 @@ SHUTD="5" # Minutes to wait before shutdown due to inactivity
 
 
 # Print on display
+sudo python3 /home/pi/little-backup-box/scripts/display.py -t "   Insert SD card"
+
+# Wait for SD card
+CARD_READER=($(ls /dev/sd* | grep "$CARD_DEV" | cut -d"/" -f3))
+until [ ! -z "${CARD_READER[0]}" ]
+  do
+  sleep 1
+  CARD_READER=($(ls /dev/sd* | grep "$CARD_DEV" | cut -d"/" -f3))
+done
+
+
+# Print on display
 sudo python3 /home/pi/little-backup-box/scripts/display.py -t "  Insert USB device"
 
 # Wait for a USB storage device (e.g., a USB flash drive)
@@ -37,19 +49,9 @@ while [ -z "${STORAGE}" ]
   STORAGE=$(ls /dev/sd* | grep "$STORAGE_DEV" | cut -d"/" -f3)
 done
 
+
 # When the USB storage device is detected, mount it
 mount /dev/"$STORAGE_DEV" "$STORAGE_MOUNT_POINT"
-
-# Print on display
-sudo python3 /home/pi/little-backup-box/scripts/display.py -t "   Insert SD card"
-
-# Wait for SD card
-CARD_READER=($(ls /dev/sd* | grep "$CARD_DEV" | cut -d"/" -f3))
-until [ ! -z "${CARD_READER[0]}" ]
-  do
-  sleep 1
-  CARD_READER=($(ls /dev/sd* | grep "$CARD_DEV" | cut -d"/" -f3))
-done
 
 # If card was detected, mount it and obtain its UUID
 if [ ! -z "${CARD_READER[0]}" ]; then
