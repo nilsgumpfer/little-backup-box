@@ -6,10 +6,21 @@
 
 # Specify devices and their their mount points
 # as well as other settings
-STORAGE_DEV="sdb1" # Name of the storage device
+STORAGE_DEV="sda1" # Name of the storage device
 STORAGE_MOUNT_POINT="/media/storage" # Mount point of the storage device
-CARD_DEV="sda1" # Name of the storage card
+CARD_DEV="sdb1" # Name of the storage card
 CARD_MOUNT_POINT="/media/card" # Mount point of the storage card
+
+# Print on display
+sudo python3 /home/pi/little-backup-box/scripts/display.py -t "   Insert SD card"
+
+# Wait for SD card
+CARD_READER=($(ls /dev/sd* | grep "$CARD_DEV" | cut -d"/" -f3))
+until [ ! -z "${CARD_READER[0]}" ]
+  do
+  sleep 0.1
+  CARD_READER=($(ls /dev/sd* | grep "$CARD_DEV" | cut -d"/" -f3))
+done
 
 # Print on display
 sudo python3 /home/pi/little-backup-box/scripts/display.py -t "  Insert USB device"
@@ -24,17 +35,6 @@ done
 
 # When the USB storage device is detected, mount it
 mount /dev/"$STORAGE_DEV" "$STORAGE_MOUNT_POINT"
-
-# Print on display
-sudo python3 /home/pi/little-backup-box/scripts/display.py -t "   Insert SD card"
-
-# Wait for SD card
-CARD_READER=($(ls /dev/sd* | grep "$CARD_DEV" | cut -d"/" -f3))
-until [ ! -z "${CARD_READER[0]}" ]
-  do
-  sleep 0.1
-  CARD_READER=($(ls /dev/sd* | grep "$CARD_DEV" | cut -d"/" -f3))
-done
 
 # If card was detected, mount it and obtain its UUID
 if [ ! -z "${CARD_READER[0]}" ]; then
