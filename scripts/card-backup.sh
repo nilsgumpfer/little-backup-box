@@ -6,9 +6,9 @@
 
 # Specify devices and their their mount points
 # as well as other settings
-STORAGE_DEV="sda1" # Name of the storage device
+STORAGE_DEV="sdb1" # Name of the storage device
 STORAGE_MOUNT_POINT="/media/storage" # Mount point of the storage device
-CARD_DEV="sdb1" # Name of the storage card
+CARD_DEV="sda1" # Name of the storage card
 CARD_MOUNT_POINT="/media/card" # Mount point of the storage card
 
 # Print on display
