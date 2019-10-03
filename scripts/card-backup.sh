@@ -83,9 +83,10 @@ while kill -0 $pid 2> /dev/null
   STORAGE_COUNT_CURR=$(find $BACKUP_PATH/ -type f | wc -l)
   TRANSFERRED=$(expr $STORAGE_COUNT_CURR - $STORAGE_COUNT_INIT)
   PERCENT=$(expr 100 \* $TRANSFERRED / $TO_TRANSFER)
+  USED=$(df -hl | grep $STORAGE_MOUNT_POINT | awk '{print $5}')
 
   # Print on display
-  sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress:  $PERCENT %" -t "Files:  $TRANSFERRED / $TO_TRANSFER"
+  sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress:  $PERCENT %" -t "Files:  $TRANSFERRED / $TO_TRANSFER" -t "Used:   $USED"
   
   sleep 0.1
 done

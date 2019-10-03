@@ -50,7 +50,7 @@ def main():
 
     # Draw some shapes.
     # First define some constants to allow easy resizing of shapes.
-    padding = 9
+    padding = 4
     space = 8
     top = padding
     bottom = height - padding
