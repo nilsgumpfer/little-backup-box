@@ -67,7 +67,7 @@ if [ -z "${STORAGE_COUNT_INIT}" ]; then
   STORAGE_COUNT_INIT=0
 fi
 
-TO_TRANSFER=$(expr $CARD_COUNT - $STORAGE_COUNT_INIT)
+TO_TRANSFER=$(expr $CARD_COUNT - $STORAGE_COUNT_INIT - 1)
 
 # ------------ Preparations -------------
 
