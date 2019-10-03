@@ -16,7 +16,7 @@
 sudo apt update
 sudo apt dist-upgrade -y
 sudo apt update
-sudo apt install acl git-core screen rsync exfat-fuse exfat-utils ntfs-3g gphoto2 libimage-exiftool-perl dialog python3-pip -y
+sudo apt install acl git-core screen rsync exfat-fuse exfat-utils ntfs-3g gphoto2 libimage-exiftool-perl dialog python3-pip build-essential python3-dev python3-pip python3-pil python3-smbus git python3-rpi.gpio libopenjp2-7 -y
 sudo pip3 install bottle
 
 sudo mkdir /media/card
@@ -27,6 +27,12 @@ sudo setfacl -Rdm g:pi:rw /media/storage
 
 cd
 git clone https://github.com/nilsgumpfer/little-backup-box.git
+
+git clone https://github.com/adafruit/Adafruit_Python_SSD1306
+
+cd Adafruit_Python_SSD1306
+sudo python3 setup.py install -y
+cd
 
 crontab -l | { cat; echo "#@reboot sudo /home/pi/little-backup-box/scripts/card-backup.sh >> /home/pi/little-backup-box.log 2>&1"; } | crontab
 
