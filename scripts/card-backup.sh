@@ -62,13 +62,12 @@ BACKUP_PATH="$STORAGE_MOUNT_POINT"/"cardbackup_$ID"
 # Count files
 CARD_COUNT=$(find $CARD_MOUNT_POINT/ -type f | wc -l)
 STORAGE_COUNT_INIT=$(find $BACKUP_PATH/ -type f | wc -l)
-TO_TRANSFER=$(expr $CARD_COUNT - $STORAGE_COUNT)
 
-card = 300
-storage_initial = 200
-to_transfer = card - storage = 100
-storage_current = 220
-progress = (storage_current - storage_initial) / to_transfer
+if [ -z "${STORAGE_COUNT_INIT}" ]
+  STORAGE_COUNT_INIT=0
+fi
+
+TO_TRANSFER=$(expr $CARD_COUNT - $STORAGE_COUNT_INIT)
 
 # ------------ Preparations -------------
 
