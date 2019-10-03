@@ -89,7 +89,7 @@ while kill -0 $pid 2> /dev/null
   # Print on display
   sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress:  $PERCENT %" -t "Files:  $TRANSFERRED / $TO_TRANSFER" -t "Used:   $STORAGE_USED / $STORAGE_CAPACITY" 
   
-  sleep 0.1
+  sleep 1
 done
 
 # ------------ Backup -------------------
@@ -98,7 +98,7 @@ done
 # ------------ Finish -------------------
 
 # Print on display
-sudo python3 /home/pi/little-backup-box/scripts/display.py -t "      Finished" -t "   Shutting down"
+sudo python3 /home/pi/little-backup-box/scripts/display.py -t "      Finished" -t " " -t "Used:   $STORAGE_USED / $STORAGE_CAPACITY"
 
 # Shutdown
 sync
