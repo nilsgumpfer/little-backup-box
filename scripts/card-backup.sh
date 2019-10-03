@@ -46,8 +46,6 @@ mount /dev/"$STORAGE_DEV" "$STORAGE_MOUNT_POINT"
 
 # ------------ Preparations -------------
 
-CARD_COUNT=$(find $CARD_MOUNT_POINT/ -type f | wc -l)
-
 # Create  an .id random identifier file if doesn't exist
 cd "$CARD_MOUNT_POINT"
 if [ ! -f *.id ]; then
@@ -60,7 +58,17 @@ cd
 
 # Set the backup path
 BACKUP_PATH="$STORAGE_MOUNT_POINT"/"cardbackup_$ID"
-STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
+
+# Count files
+CARD_COUNT=$(find $CARD_MOUNT_POINT/ -type f | wc -l)
+STORAGE_COUNT_INIT=$(find $BACKUP_PATH/ -type f | wc -l)
+TO_TRANSFER=$(expr $CARD_COUNT - $STORAGE_COUNT)
+
+card = 300
+storage_initial = 200
+to_transfer = card - storage = 100
+storage_current = 220
+progress = (storage_current - storage_initial) / to_transfer
 
 # ------------ Preparations -------------
 
@@ -73,11 +81,12 @@ pid=$!
 
 while kill -0 $pid 2> /dev/null
   do
-  STORAGE_COUNT=$(find $BACKUP_PATH/ -type f | wc -l)
-  PERCENT=$(expr 100 \* $STORAGE_COUNT / $CARD_COUNT)
+  STORAGE_COUNT_CURR=$(find $BACKUP_PATH/ -type f | wc -l)
+  TRANSFERRED=$(expr $STORAGE_COUNT_CURR - $STORAGE_COUNT_INIT)
+  PERCENT=$(expr 100 \* $TRANSFERRED / $TO_TRANSFER)
 
   # Print on display
-  sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress:  $PERCENT %" -t "Files:  $STORAGE_COUNT / $CARD_COUNT"
+  sudo python3 /home/pi/little-backup-box/scripts/display.py -t "Progress:  $PERCENT %" -t "Files:  $TRANSFERRED / $TO_TRANSFER"
   
   sleep 0.1
 done
