@@ -63,7 +63,7 @@ BACKUP_PATH="$STORAGE_MOUNT_POINT"/"cardbackup_$ID"
 CARD_COUNT=$(find $CARD_MOUNT_POINT/ -type f | wc -l)
 STORAGE_COUNT_INIT=$(find $BACKUP_PATH/ -type f | wc -l)
 
-if [ -z "${STORAGE_COUNT_INIT}" ]
+if [ -z "${STORAGE_COUNT_INIT}" ]; then
   STORAGE_COUNT_INIT=0
 fi
 
